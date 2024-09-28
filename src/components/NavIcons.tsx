@@ -31,7 +31,7 @@ const NavIcons = () => {
         onClick={handleProfile}
       />
       {isProfileOpen && (
-        <div className="absolute left-0 top-12 z-20 rounded-md p-4 text-sm shadow-lg">
+        <div className="absolute left-0 top-12 z-20 rounded-md bg-white p-4 text-sm shadow-lg">
           <Link href="/profile">Profile</Link>
           <div className="mt-2 cursor-pointer">Logout</div>
         </div>

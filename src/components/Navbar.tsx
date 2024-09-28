@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div className="relative h-20 px-4 md:px-8 lg:px-16 xl:px-32">
+    <div className="relative h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       {/* MOBILE */}
       <div className="flex h-full items-center justify-between sm:hidden">
         <Link href="/" className="tracking-wide">
