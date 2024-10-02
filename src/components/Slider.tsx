@@ -6,22 +6,25 @@ import { useEffect, useState } from "react";
 const slides = [
   {
     id: 1,
-    title: "Slide 1",
-    description: "Description 1",
+    title: "Diskon Hingga 50%!",
+    description:
+      "Dapatkan produk alat kesehatan terbaik dengan harga spesial. Penawaran terbatas!",
     img: "https://picsum.photos/800/1200",
     url: "/",
   },
   {
     id: 2,
-    title: "Slide 2",
-    description: "Description 2",
+    title: "Produk Kesehatan Terbaru",
+    description:
+      "Selalu up-to-date dengan alat kesehatan terbaru untuk kebutuhan rumah sakit dan pribadi.",
     img: "https://picsum.photos/800/1200",
     url: "/",
   },
   {
     id: 3,
-    title: "Slide 3",
-    description: "Description 3",
+    title: "Gratis Ongkir ke Seluruh Indonesia!",
+    description:
+      "Nikmati pengiriman gratis untuk semua pembelian alat kesehatan tanpa minimal order.",
     img: "https://picsum.photos/800/1200",
     url: "/",
   },
@@ -51,14 +54,14 @@ const Slider = () => {
             className={`flex h-full w-screen flex-col gap-16 lg:flex-row`}
           >
             {/* Text Container */}
-            <div className="flex h-1/2 flex-col items-center justify-center gap-8 lg:h-full lg:w-1/2 2xl:gap-12">
-              <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
-                {slide.description}
-              </h2>
+            <div className="flex h-1/2 flex-col items-center justify-center gap-8 p-12 text-center lg:h-full lg:w-1/2 2xl:gap-12">
               <h1 className="text-5xl font-semibold lg:text-6xl 2xl:text-8xl">
                 {slide.title}
-              </h1>
-              <Link href={slide.url}>
+              </h1>{" "}
+              <h2 className="text-sm lg:text-base 2xl:text-lg">
+                {slide.description}
+              </h2>
+              <Link href={"/list"}>
                 <button className="rounded-md bg-black px-4 py-3 text-white">
                   Beli
                 </button>
