@@ -10,22 +10,33 @@ export const metadata: Metadata = {
 };
 
 const fetchProduct = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}api/389fa5d0-fcc1-438e-a1b8-ea9899e17a66/products`,
-    {
-      next: {
-        revalidate: 60,
-      },
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
+    next: {
+      revalidate: 60,
     },
-  );
+  });
+  const data = await res.json();
+  return data;
+};
+
+const fetchCategory = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+    next: {
+      revalidate: 60,
+    },
+  });
   const data = await res.json();
   return data;
 };
 
 export default async function Home() {
   const allProduct = await fetchProduct();
+  const allCategory = await fetchCategory();
 
   if (!allProduct) {
+    return <div>Loading...</div>;
+  }
+  if (!allCategory) {
     return <div>Loading...</div>;
   }
   return (
@@ -33,17 +44,17 @@ export default async function Home() {
       <Slider />
       <div className="mt-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
         <h1 className="text-2xl">Produk Unggulan</h1>
-        <ProductList product={allProduct} />
+        <ProductList product={allProduct} featured />
       </div>
       <div className="mt-24">
         <h1 className="mb-12 px-4 text-2xl md:px-8 lg:px-16 xl:px-32 2xl:px-64">
           Kategori
         </h1>
-        <CategoryList />
+        <CategoryList category={allCategory} />
       </div>
       <div className="mt-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
         <h1 className="text-2xl">Produk Baru</h1>
-        {/* <ProductList /> */}
+        <ProductList product={allProduct} newest />
       </div>
     </div>
   );

@@ -1,22 +1,61 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   IoCartOutline,
   IoNotificationsOutline,
   IoPersonOutline,
 } from "react-icons/io5";
 import CartModal from "./CartModal";
+import { ProductCart } from "@/types/type";
 
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<ProductCart[]>([]);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const isLoggedIn = false;
+
+  if (typeof window === "undefined") return null;
+
+  const cart = localStorage.getItem("cart");
+
+  useEffect(() => {
+    if (pathname === "/cart") {
+      console.log("🚀 ~ useEffect ~ pathname:", pathname);
+      setIsCartOpen(false);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (cart) {
+      setCartItems(JSON.parse(cart));
+    }
+    // Listen for 'cart-updated' event
+    const handleCartUpdate = () => {
+      const updatedCart = localStorage.getItem("cart");
+      if (updatedCart) {
+        setCartItems(JSON.parse(updatedCart));
+      }
+    };
+    window.addEventListener("cart-updated", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cart-updated", handleCartUpdate);
+    };
+  }, []);
+
+  const removeProductFromCart = (id: string) => {
+    if (!cartItems) return;
+    const newCart = cartItems.filter((item: ProductCart) => item.id !== id);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartItems(newCart);
+  };
 
   const handleProfile = () => {
     if (!isLoggedIn) {
@@ -42,10 +81,15 @@ const NavIcons = () => {
           className="h-6 w-6 cursor-pointer"
           onClick={() => setIsCartOpen((prev) => !prev)}
         />
-        <div className="absolute -right-4 -top-4 flex h-6 w-6 items-center justify-center rounded-full bg-rose-500 text-sm text-white">
-          2
+        <div
+          style={{ display: cartItems.length === 0 ? "none" : "" }}
+          className="absolute -right-4 -top-4 flex h-6 w-6 items-center justify-center rounded-full bg-rose-500 text-sm text-white"
+        >
+          {cartItems.length}
         </div>
-        {isCartOpen && <CartModal />}
+        {isCartOpen && (
+          <CartModal cartItems={cartItems} remove={removeProductFromCart} />
+        )}
       </div>
     </div>
   );

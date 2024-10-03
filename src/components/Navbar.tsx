@@ -10,7 +10,7 @@ const Navbar = () => {
     <div className="relative h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       {/* MOBILE */}
       <div className="flex h-full items-center justify-between sm:hidden">
-        <Link href="/" className="tracking-wide">
+        <Link href="/" className="tracking-wid font-medium">
           MedSupply
         </Link>
         <Menu />
@@ -27,12 +27,12 @@ const Navbar = () => {
               alt="logo"
               className="h-6 w-6"
             />
-            <div className="text-xl tracking-wide">MedSupply</div>
+            <div className="text-xl font-medium tracking-wide">MedSupply</div>
           </Link>
           <div className="hidden gap-4 xl:!flex">
             <Link href="/">Home</Link>
-            <Link href="/">Shop</Link>
-            <Link href="/">Deals</Link>
+            <Link href="/list">Shop</Link>
+            <Link href="/list">Deals</Link>
             <Link href="/">About</Link>
             <Link href="/">Contact</Link>
           </div>

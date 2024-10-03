@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -9,24 +10,21 @@ const slides = [
     title: "Diskon Hingga 50%!",
     description:
       "Dapatkan produk alat kesehatan terbaik dengan harga spesial. Penawaran terbatas!",
-    img: "https://picsum.photos/800/1200",
-    url: "/",
+    url: "/list",
   },
   {
     id: 2,
     title: "Produk Kesehatan Terbaru",
     description:
       "Selalu up-to-date dengan alat kesehatan terbaru untuk kebutuhan rumah sakit dan pribadi.",
-    img: "https://picsum.photos/800/1200",
-    url: "/",
+    url: "/list",
   },
   {
     id: 3,
     title: "Gratis Ongkir ke Seluruh Indonesia!",
     description:
       "Nikmati pengiriman gratis untuk semua pembelian alat kesehatan tanpa minimal order.",
-    img: "https://picsum.photos/800/1200",
-    url: "/",
+    url: "/list",
   },
 ];
 
@@ -69,9 +67,10 @@ const Slider = () => {
             </div>
             {/* Image Container */}
             <div className="relative h-1/2 w-full lg:h-full lg:w-1/2">
-              <img
-                src={slide.img}
+              <Image
+                src={`/banners/${slide.id}.jpg`}
                 alt={slide.title}
+                fill
                 className="h-full w-full object-cover"
               />
             </div>

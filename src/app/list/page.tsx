@@ -1,8 +1,54 @@
+"use client";
 import Filter from "@/components/Filter";
 import ProductList from "@/components/ProductList";
-import React from "react";
+import { Category, Product, Sort } from "@/types/type";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const page = () => {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("name") || "";
+  const category = searchParams.get("category") || "";
+  const sort: Sort = (searchParams.get("sort") as Sort) || "newest";
+
+  const [allProduct, setAllProduct] = useState<Product[]>();
+  const [allCategory, setAllCategory] = useState<Category[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const fetchProduct = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
+        next: {
+          revalidate: 60,
+        },
+      });
+      const data = await res.json();
+
+      setAllProduct(data);
+
+      setIsLoading(false);
+    } catch (err) {
+      console.log("🚀 ~ fetchProduct ~ err:", err);
+    }
+  };
+
+  const fetchCategory = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+      next: {
+        revalidate: 60,
+      },
+    });
+    const data = await res.json();
+    setAllCategory(data);
+    return data;
+  };
+
+  useEffect(() => {
+    fetchProduct();
+    fetchCategory();
+  }, []);
+
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       {/* Campaign */}
@@ -11,9 +57,11 @@ const page = () => {
           <h1 className="text-4xl font-semibold leading-[48px] text-neutral-700">
             Promo Spesial Bulan Ini <br /> Diskon Hingga 50%
           </h1>
-          <button className="w-max rounded-3xl bg-rose-500 px-5 py-3 text-sm text-white">
-            Beli Sekarang
-          </button>
+          <a href="#product">
+            <button className="w-max rounded-3xl bg-rose-500 px-5 py-3 text-sm text-white">
+              Beli Sekarang
+            </button>
+          </a>
         </div>
         <div className="hidden rounded-lg xl:!flex">
           <img
@@ -24,10 +72,23 @@ const page = () => {
         </div>
       </div>
       {/* FILTER */}
-      <Filter />
+      {allCategory && <Filter category={allCategory} />}
       {/* PRODUCT */}
-      <h1 className="mt-12 text-xl font-semibold">Produk untuk Kamu</h1>
-      <ProductList />
+      <h1 className="mt-12 text-xl font-semibold" id="product">
+        Produk untuk Kamu
+      </h1>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        allProduct && (
+          <ProductList
+            product={allProduct}
+            category={category}
+            sort={sort}
+            search={search}
+          />
+        )
+      )}
     </div>
   );
 };

@@ -1,11 +1,9 @@
 "use client";
+import { Image } from "@/types/type";
 import { useState } from "react";
 
 type ProductImagesProps = {
-  images: {
-    id: number;
-    url: string;
-  }[];
+  images: Image[];
 };
 
 const ProductImages = ({ images }: ProductImagesProps) => {
@@ -29,7 +27,7 @@ const ProductImages = ({ images }: ProductImagesProps) => {
             <img
               src={image.url}
               alt="product"
-              className="h-full w-full rounded-md object-cover"
+              className="h-full w-full rounded-md object-cover transition-all hover:brightness-90"
             />
           </div>
         ))}

@@ -1,32 +1,33 @@
-"use client";
-
 import Add from "@/components/Add";
-import CustomizeProduct from "@/components/CustomizeProduct";
 import ProductImages from "@/components/ProductImages";
+import { Product } from "@/types/type";
 import { formatToRupiah } from "@/utils/helper/formatCurrency";
+import { createSlugFromName } from "@/utils/helper/slug";
 
-import { useState } from "react";
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  isDiscounted: boolean;
-  discountPercentage: number;
-  stock: number;
-  description: string;
-  images: ProductImage[];
-  productDetail: string;
+const fetchProduct = async (slug: string) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
+    next: {
+      revalidate: 60,
+    },
+  });
+  const data: Product[] = await res.json();
+  const selectedProduct = data.find(
+    (product: Product) => createSlugFromName(product.name) === slug,
+  );
+  return selectedProduct || null;
 };
 
-type ProductImage = {
-  id: number;
-  url: string;
-};
-
-const SinglePage = ({ params }: { params: { slug: string } }) => {
+const SinglePage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
-  const [product, setProduct] = useState(dummy);
+
+  const product = await fetchProduct(slug);
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
+
+  const randomDiscount = Math.floor(Math.random() * 50) + 1;
+  const discountMultiplier = 1 - randomDiscount / 100;
 
   return (
     <div className="relative flex flex-col gap-16 px-4 md:px-8 lg:flex-row lg:px-16 xl:px-32 2xl:px-64">
@@ -36,34 +37,41 @@ const SinglePage = ({ params }: { params: { slug: string } }) => {
       </div>
       {/* Text */}
       <div className="flex w-full flex-col gap-6 lg:w-1/2">
+        <p className="mt-8 text-xs text-neutral-500">
+          Produk {">"} Alat Kesehatan {">"} {product.category.name}
+        </p>
         <h1 className="text-4xl font-medium">{product.name}</h1>
-        <p className="text-neutral-500">{product.description}</p>
+        <p className="max-h-12 overflow-hidden text-neutral-500">
+          {product.description}
+        </p>
         <div className="h-[2px] bg-neutral-100"></div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <h3 className="text-base text-rose-500 line-through">
-              {formatToRupiah(product.price)}
+              {formatToRupiah(Number(product.price))}
             </h3>
             <div
               className="rounded-md bg-rose-500 px-2 py-1 text-sm font-medium text-white
             "
             >
-              {product.discountPercentage}%
+              {randomDiscount}%
             </div>
           </div>
           <h2 className="text-3xl font-semibold">
-            {formatToRupiah(
-              ((100 - product.discountPercentage) / 100) * product.price,
-            )}
+            {formatToRupiah(Number(product.price) * discountMultiplier)}
           </h2>
         </div>
         <div className="h-[2px] bg-neutral-100"></div>
-        <CustomizeProduct />
-        <Add stock={4} />
+        {/* <CustomizeProduct /> */}
+        <Add
+          stock={Number(product.stock)}
+          product={product}
+          price={Number(product.price) * discountMultiplier}
+        />
         <div className="h-[2px] bg-neutral-100"></div>
         <div className="text-sm">
           <h4 className="mb-4 text-lg font-medium">Informasi Produk</h4>
-          <p>{product.productDetail}</p>
+          <p>{product.description}</p>
         </div>
       </div>
     </div>
@@ -71,34 +79,3 @@ const SinglePage = ({ params }: { params: { slug: string } }) => {
 };
 
 export default SinglePage;
-
-const dummy: Product = {
-  id: "1",
-  name: "Product Name",
-  description:
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit fugiat neque quos? Ut illo provident vitae excepturi adipisci dolorem? Iste, at alias? Assumenda atque minus accusamus nobis vitae voluptates nostrum.",
-  productDetail:
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, assumenda fugit consectetur facere aspernatur perferendis quam officia nulla distinctio nihil explicabo at in eaque. Provident inventore enim corrupti architecto sed!",
-  price: 120000,
-  discountPercentage: 16,
-  isDiscounted: true,
-  stock: 4,
-  images: [
-    {
-      id: 1,
-      url: "https://picsum.photos/500/500",
-    },
-    {
-      id: 2,
-      url: "https://images.pexels.com/photos/2280547/pexels-photo-2280547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-    {
-      id: 3,
-      url: "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-    {
-      id: 4,
-      url: "https://images.pexels.com/photos/28585011/pexels-photo-28585011/free-photo-of-cetakan-gambar-ekg-rinci-pada-monitor-jantung.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-  ],
-};
