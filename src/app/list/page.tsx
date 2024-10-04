@@ -17,13 +17,17 @@ const fetchProduct = async (): Promise<Product[] | undefined> => {
 };
 
 const fetchCategory = async (): Promise<Category[] | undefined> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
-    next: {
-      revalidate: 60,
-    },
-  });
-  const data = await res.json();
-  return data;
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+      next: {
+        revalidate: 60,
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log("🚀 ~ fetchCategory ~ error:", error);
+  }
 };
 
 const ProductListPage = async ({
