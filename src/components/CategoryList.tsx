@@ -1,5 +1,7 @@
-import { Category } from "@/types/type";
-import Link from "next/link";
+'use client';
+
+import { Category } from '@/types/type';
+import Link from 'next/link';
 
 type CategoryListProps = {
   category: Category[];

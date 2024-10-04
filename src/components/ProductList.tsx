@@ -1,8 +1,10 @@
-import { Product, Sort } from "@/types/type";
-import { formatToRupiah } from "@/utils/helper/formatCurrency";
-import { createSlugFromName } from "@/utils/helper/slug";
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+
+import { Product, Sort } from '@/types/type';
+import { formatToRupiah } from '@/utils/helper/formatCurrency';
+import { createSlugFromName } from '@/utils/helper/slug';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type ProductListProps = {
   product: Product[];
@@ -27,39 +29,39 @@ const ProductList = ({
   if (featured) {
     product = product.filter((item: Product) => item.isFeatured === true);
   }
-  if (category && category !== "all") {
+  if (category && category !== 'all') {
     const filteredData = product.filter(
-      (product: Product) => product.category.name === category,
+      (product: Product) => product.category.name === category
     );
     product = filteredData;
   }
   if (sort) {
-    if (sort === "price_asc") {
+    if (sort === 'price_asc') {
       product = product.sort(
-        (a: Product, b: Product) => Number(a.price) - Number(b.price),
+        (a: Product, b: Product) => Number(a.price) - Number(b.price)
       );
     }
-    if (sort === "price_desc") {
+    if (sort === 'price_desc') {
       product = product.sort(
-        (a: Product, b: Product) => Number(b.price) - Number(a.price),
+        (a: Product, b: Product) => Number(b.price) - Number(a.price)
       );
     }
-    if (sort === "newest") {
+    if (sort === 'newest') {
       product = product.sort(
         (a: Product, b: Product) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
     }
-    if (sort === "oldest") {
+    if (sort === 'oldest') {
       product = product.sort(
         (a: Product, b: Product) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
     }
   }
   if (search) {
     product = product.filter((item: Product) =>
-      item.name.toLowerCase().includes(search.toLowerCase()),
+      item.name.toLowerCase().includes(search.toLowerCase())
     );
   }
   return (

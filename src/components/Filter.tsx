@@ -1,6 +1,7 @@
-"use client";
-import { Category } from "@/types/type";
-import { useRouter } from "next/navigation";
+'use client';
+
+import { Category } from '@/types/type';
+import { useRouter } from 'next/navigation';
 
 type FilterProps = {
   category: Category[];
@@ -12,10 +13,10 @@ const Filter = ({ category }: FilterProps) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const category = formData.get("category");
-    const min = formData.get("min");
-    const max = formData.get("max");
-    const sort = formData.get("sort");
+    const category = formData.get('category');
+    const min = formData.get('min');
+    const max = formData.get('max');
+    const sort = formData.get('sort');
 
     console.log({ category, min, max, sort });
 
@@ -36,8 +37,8 @@ const Filter = ({ category }: FilterProps) => {
 
   const clearFilter = () => {
     const queryParams = new URLSearchParams({
-      category: "all",
-      sort: "newest",
+      category: 'all',
+      sort: 'newest',
     }).toString();
     router.push(`/list?${queryParams}`);
   };
@@ -83,7 +84,7 @@ const Filter = ({ category }: FilterProps) => {
           <select
             name="sort"
             id="sort"
-            defaultValue={"newest"}
+            defaultValue={'newest'}
             onChange={onSelectSortChange}
             className="bg-slate-white w-max rounded-lg px-4 py-2 text-xs font-medium ring-1 ring-neutral-400"
           >

@@ -1,4 +1,5 @@
 'use client';
+
 import Filter from '@/components/Filter';
 import ProductList from '@/components/ProductList';
 import { Category, Product, Sort } from '@/types/type';

@@ -1,7 +1,9 @@
-import { ProductCart } from "@/types/type";
-import { formatToRupiah } from "@/utils/helper/formatCurrency";
-import Image from "next/image";
-import React from "react";
+'use client';
+
+import { ProductCart } from '@/types/type';
+import { formatToRupiah } from '@/utils/helper/formatCurrency';
+import Image from 'next/image';
+import React from 'react';
 
 type CartListProps = {
   cartItems: ProductCart[];
@@ -63,7 +65,7 @@ const CartList = ({
               onClick={() => changeQuantity(item.id, item.quantity - 1)}
               disabled={item.quantity === 1}
               style={{
-                cursor: item.quantity === 1 ? "not-allowed" : "",
+                cursor: item.quantity === 1 ? 'not-allowed' : '',
               }}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pb-0.5 text-xl transition-all hover:enabled:bg-neutral-200"
             >
@@ -75,7 +77,7 @@ const CartList = ({
               disabled={item.quantity === Number(item.stock)}
               style={{
                 cursor:
-                  item.quantity === Number(item.stock) ? "not-allowed" : "",
+                  item.quantity === Number(item.stock) ? 'not-allowed' : '',
               }}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pb-0.5 pr-0.5 text-xl transition-all hover:enabled:bg-neutral-200"
             >
