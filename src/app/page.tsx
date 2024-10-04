@@ -1,32 +1,41 @@
-import CategoryList from '@/components/CategoryList';
-import ProductList from '@/components/ProductList';
-import Slider from '@/components/Slider';
-import { Metadata } from 'next';
+import CategoryList from "@/components/CategoryList";
+import ProductList from "@/components/ProductList";
+import Slider from "@/components/Slider";
+import { Category, Product } from "@/types/type";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Med Supply | Jual Beli Alat Kesehatan',
+  title: "Med Supply | Jual Beli Alat Kesehatan",
   description:
-    'Med Supply adalah platform jual beli alat kesehatan, obat-obatan, dan perlengkapan medis',
+    "Med Supply adalah platform jual beli alat kesehatan, obat-obatan, dan perlengkapan medis",
 };
 
-const fetchProduct = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
-    next: {
-      revalidate: 60,
-    },
-  });
-  const data = await res.json();
-  return data;
+const fetchProduct = async (): Promise<Product[] | undefined> => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
+      next: {
+        revalidate: 60,
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log("🚀 ~ fetchProduct ~ error:", error);
+  }
 };
 
-const fetchCategory = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
-    next: {
-      revalidate: 60,
-    },
-  });
-  const data = await res.json();
-  return data;
+const fetchCategory = async (): Promise<Category[] | undefined> => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+      next: {
+        revalidate: 60,
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log("🚀 ~ fetchCategory ~ error:", error);
+  }
 };
 
 const Home = async () => {
@@ -36,9 +45,11 @@ const Home = async () => {
   if (!allProduct) {
     return <div>Loading...</div>;
   }
+
   if (!allCategory) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="">
       <Slider />

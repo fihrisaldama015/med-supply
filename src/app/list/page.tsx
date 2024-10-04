@@ -1,54 +1,56 @@
-'use client';
+import Filter from "@/components/Filter";
+import ProductList from "@/components/ProductList";
+import { Category, Product, Sort } from "@/types/type";
 
-import Filter from '@/components/Filter';
-import ProductList from '@/components/ProductList';
-import { Category, Product, Sort } from '@/types/type';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-const ProductListPage = () => {
-  const searchParams = useSearchParams();
-  const search = searchParams.get('name') || '';
-  const category = searchParams.get('category') || '';
-  const sort: Sort = (searchParams.get('sort') as Sort) || 'newest';
-
-  const [allProduct, setAllProduct] = useState<Product[]>();
-  const [allCategory, setAllCategory] = useState<Category[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const fetchProduct = async () => {
-    try {
-      setIsLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
-        next: {
-          revalidate: 60,
-        },
-      });
-      const data = await res.json();
-
-      setAllProduct(data);
-
-      setIsLoading(false);
-    } catch (err) {
-      console.log('🚀 ~ fetchProduct ~ err:', err);
-    }
-  };
-
-  const fetchCategory = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+const fetchProduct = async (): Promise<Product[] | undefined> => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
       next: {
         revalidate: 60,
       },
     });
     const data = await res.json();
-    setAllCategory(data);
     return data;
-  };
+  } catch (err) {
+    console.log("🚀 ~ fetchProduct ~ err:", err);
+  }
+};
 
-  useEffect(() => {
-    fetchProduct();
-    fetchCategory();
-  }, []);
+const fetchCategory = async (): Promise<Category[] | undefined> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}categories`, {
+    next: {
+      revalidate: 60,
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
+const ProductListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  // const searchParams = useSearchParams();
+  // const search = searchParams.get('name') || '';
+  // const category = searchParams.get('category') || '';
+  // const sort: Sort = (searchParams.get('sort') as Sort) || 'newest';
+  const { name: search, category, sort } = searchParams;
+  const allProduct = await fetchProduct();
+  fetchCategory();
+  const allCategory = await fetchCategory();
+
+  // const [allProduct, setAllProduct] = useState<Product[]>();
+  // const [allCategory, setAllCategory] = useState<Category[]>();
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  if (!allProduct) {
+    return <div>Loading...</div>;
+  }
+
+  if (!allCategory) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
@@ -78,18 +80,13 @@ const ProductListPage = () => {
       <h1 className="mt-12 text-xl font-semibold" id="product">
         Produk untuk Kamu
       </h1>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        allProduct && (
-          <ProductList
-            product={allProduct}
-            category={category}
-            sort={sort}
-            search={search}
-          />
-        )
-      )}
+
+      <ProductList
+        product={allProduct}
+        category={category}
+        sort={(sort as Sort) || "newest"}
+        search={search}
+      />
     </div>
   );
 };

@@ -4,17 +4,22 @@ import { Product } from "@/types/type";
 import { formatToRupiah } from "@/utils/helper/formatCurrency";
 import { createSlugFromName } from "@/utils/helper/slug";
 
-const fetchProduct = async (slug: string) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
-    next: {
-      revalidate: 60,
-    },
-  });
-  const data: Product[] = await res.json();
-  const selectedProduct = data.find(
-    (product: Product) => createSlugFromName(product.name) === slug,
-  );
-  return selectedProduct || null;
+const fetchProduct = async (slug: string): Promise<Product | undefined> => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
+      next: {
+        revalidate: 60,
+      },
+    });
+    const data: Product[] = await res.json();
+    const selectedProduct = data.find(
+      (product: Product) => createSlugFromName(product.name) === slug
+    );
+
+    return selectedProduct;
+  } catch (error) {
+    console.log("🚀 ~ fetchProduct ~ error:", error);
+  }
 };
 
 const SinglePage = async ({ params }: { params: { slug: string } }) => {
