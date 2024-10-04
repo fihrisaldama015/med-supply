@@ -15,9 +15,8 @@ const CartPage = () => {
   const checkoutAction = searchParams.get("action") == "checkout" || false;
   console.log("🚀 ~ CartPage ~ checkoutAction:", checkoutAction);
 
-  const cart = localStorage.getItem("cart");
-
   useEffect(() => {
+    const cart = localStorage.getItem("cart");
     if (cart) {
       setCartItems(JSON.parse(cart));
     }

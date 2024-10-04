@@ -21,10 +21,6 @@ const NavIcons = () => {
 
   const isLoggedIn = false;
 
-  if (typeof window === "undefined") return null;
-
-  const cart = localStorage.getItem("cart");
-
   useEffect(() => {
     if (pathname === "/cart") {
       console.log("🚀 ~ useEffect ~ pathname:", pathname);
@@ -33,6 +29,7 @@ const NavIcons = () => {
   }, [pathname]);
 
   useEffect(() => {
+    const cart = localStorage.getItem("cart");
     if (cart) {
       setCartItems(JSON.parse(cart));
     }
