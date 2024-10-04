@@ -1,43 +1,43 @@
-"use client";
+'use client';
 
-import CartList from "@/components/CartList";
-import CheckoutModal from "@/components/CheckoutModal";
-import { ProductCart } from "@/types/type";
-import { formatToRupiah } from "@/utils/helper/formatCurrency";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import CartList from '@/components/CartList';
+import CheckoutModal from '@/components/CheckoutModal';
+import { ProductCart } from '@/types/type';
+import { formatToRupiah } from '@/utils/helper/formatCurrency';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const searchParams = useSearchParams();
 
-  const checkoutAction = searchParams.get("action") == "checkout" || false;
-  console.log("🚀 ~ CartPage ~ checkoutAction:", checkoutAction);
+  const checkoutAction = searchParams.get('action') == 'checkout' || false;
+  console.log('🚀 ~ CartPage ~ checkoutAction:', checkoutAction);
 
   useEffect(() => {
-    const cart = localStorage.getItem("cart");
+    const cart = localStorage.getItem('cart');
     if (cart) {
       setCartItems(JSON.parse(cart));
     }
     // Listen for 'cart-updated' event
     const handleCartUpdate = () => {
-      const updatedCart = localStorage.getItem("cart");
+      const updatedCart = localStorage.getItem('cart');
       if (updatedCart) {
         setCartItems(JSON.parse(updatedCart));
       }
     };
-    window.addEventListener("cart-updated", handleCartUpdate);
+    window.addEventListener('cart-updated', handleCartUpdate);
 
     return () => {
-      window.removeEventListener("cart-updated", handleCartUpdate);
+      window.removeEventListener('cart-updated', handleCartUpdate);
     };
   }, []);
 
   const subtotal = cartItems.reduce(
     (acc: number, item: ProductCart) =>
       acc + Number(item.price) * item.quantity,
-    0,
+    0
   );
 
   const total = subtotal + 3000;
@@ -45,9 +45,9 @@ const CartPage = () => {
   const removeProductFromCart = (id: string) => {
     if (!cartItems) return;
     const newCart = cartItems.filter((item: ProductCart) => item.id !== id);
-    localStorage.setItem("cart", JSON.stringify(newCart));
+    localStorage.setItem('cart', JSON.stringify(newCart));
     setCartItems(newCart);
-    window.dispatchEvent(new Event("cart-updated"));
+    window.dispatchEvent(new Event('cart-updated'));
   };
 
   const changeQuantity = (id: string, quantity: number) => {
@@ -57,9 +57,9 @@ const CartPage = () => {
       }
       return item;
     });
-    localStorage.setItem("cart", JSON.stringify(newCart));
+    localStorage.setItem('cart', JSON.stringify(newCart));
     setCartItems(newCart);
-    window.dispatchEvent(new Event("cart-updated"));
+    window.dispatchEvent(new Event('cart-updated'));
   };
 
   if (cartItems.length === 0) {

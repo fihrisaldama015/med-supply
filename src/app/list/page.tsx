@@ -1,15 +1,15 @@
-"use client";
-import Filter from "@/components/Filter";
-import ProductList from "@/components/ProductList";
-import { Category, Product, Sort } from "@/types/type";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+'use client';
+import Filter from '@/components/Filter';
+import ProductList from '@/components/ProductList';
+import { Category, Product, Sort } from '@/types/type';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-const page = () => {
+const ProductListPage = () => {
   const searchParams = useSearchParams();
-  const search = searchParams.get("name") || "";
-  const category = searchParams.get("category") || "";
-  const sort: Sort = (searchParams.get("sort") as Sort) || "newest";
+  const search = searchParams.get('name') || '';
+  const category = searchParams.get('category') || '';
+  const sort: Sort = (searchParams.get('sort') as Sort) || 'newest';
 
   const [allProduct, setAllProduct] = useState<Product[]>();
   const [allCategory, setAllCategory] = useState<Category[]>();
@@ -29,7 +29,7 @@ const page = () => {
 
       setIsLoading(false);
     } catch (err) {
-      console.log("🚀 ~ fetchProduct ~ err:", err);
+      console.log('🚀 ~ fetchProduct ~ err:', err);
     }
   };
 
@@ -93,4 +93,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ProductListPage;

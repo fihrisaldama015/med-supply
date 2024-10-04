@@ -1,6 +1,6 @@
-"use client";
-import { Product } from "@/types/type";
-import { useState } from "react";
+'use client';
+import { Product } from '@/types/type';
+import { useState } from 'react';
 
 type AddProps = {
   stock: number;
@@ -24,7 +24,7 @@ const Add = ({ stock, product, price }: AddProps) => {
   };
 
   const addToCartLocalStorage = () => {
-    const cart = localStorage.getItem("cart");
+    const cart = localStorage.getItem('cart');
     const cartData = cart ? JSON.parse(cart) : [];
 
     const isExist = cartData.find((item: Product) => item.id === product.id);
@@ -39,9 +39,10 @@ const Add = ({ stock, product, price }: AddProps) => {
       cartData.push({ ...product, quantity, price: price.toString() });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cartData));
-    window.dispatchEvent(new Event("cart-updated"));
+    localStorage.setItem('cart', JSON.stringify(cartData));
+    window.dispatchEvent(new Event('cart-updated'));
   };
+
   return (
     <div className="flex flex-col gap-4">
       <h4 className="font-medium">Pilih Jumlah</h4>
@@ -52,7 +53,7 @@ const Add = ({ stock, product, price }: AddProps) => {
               onClick={handleSubtractQuantity}
               disabled={quantity === 1}
               style={{
-                cursor: quantity === 1 ? "not-allowed" : "",
+                cursor: quantity === 1 ? 'not-allowed' : '',
               }}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pb-0.5 text-xl transition-all hover:enabled:bg-neutral-200"
             >
@@ -63,7 +64,7 @@ const Add = ({ stock, product, price }: AddProps) => {
               onClick={handleAddQuantity}
               disabled={quantity === stock}
               style={{
-                cursor: quantity === stock ? "not-allowed" : "",
+                cursor: quantity === stock ? 'not-allowed' : '',
               }}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pb-0.5 pr-0.5 text-xl transition-all hover:enabled:bg-neutral-200"
             >
