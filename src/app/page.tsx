@@ -1,12 +1,12 @@
-import CategoryList from "@/components/CategoryList";
-import ProductList from "@/components/ProductList";
-import Slider from "@/components/Slider";
-import { Metadata } from "next";
+import CategoryList from '@/components/CategoryList';
+import ProductList from '@/components/ProductList';
+import Slider from '@/components/Slider';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Med Supply | Jual Beli Alat Kesehatan",
+  title: 'Med Supply | Jual Beli Alat Kesehatan',
   description:
-    "Med Supply adalah platform jual beli alat kesehatan, obat-obatan, dan perlengkapan medis",
+    'Med Supply adalah platform jual beli alat kesehatan, obat-obatan, dan perlengkapan medis',
 };
 
 const fetchProduct = async () => {
@@ -29,7 +29,7 @@ const fetchCategory = async () => {
   return data;
 };
 
-export default async function Home() {
+const Home = async () => {
   const allProduct = await fetchProduct();
   const allCategory = await fetchCategory();
 
@@ -58,4 +58,6 @@ export default async function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;
